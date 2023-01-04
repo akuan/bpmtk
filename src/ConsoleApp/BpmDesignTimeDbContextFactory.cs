@@ -12,9 +12,10 @@ namespace ConsoleApp
         public virtual ApplicationDbContext CreateDbContext(string[] args)
         {
             var builder = new DbContextOptionsBuilder();
-           // builder.UseLoggerFactory(loggerFactory);
-           // builder.UseLazyLoadingProxies(true);
-            builder.UseMySql("server=localhost;uid=root;pwd=123456;database=bpmtk3");
+            // builder.UseLoggerFactory(loggerFactory);
+            // builder.UseLazyLoadingProxies(true);
+            var conn = "server=localhost;uid=root;pwd=123456;database=bpmtk3";
+            builder.UseMySql(conn, ServerVersion.AutoDetect(conn));
 
             return new ApplicationDbContext(builder.Options);
         }

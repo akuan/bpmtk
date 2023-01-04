@@ -11,11 +11,12 @@ namespace Bpmtk.Engine.Scripting
         {
             this.engine = new Jint.Engine(x =>
             {
-                x.Culture(System.Globalization.CultureInfo.CurrentCulture);
-                x.AllowClr();
+                x.Culture=System.Globalization.CultureInfo.CurrentCulture;
+                //x.AllowClr();
 
                 if (variableResolver != null)
-                    x.SetReferencesResolver(new JavascriptReferenceResolver(variableResolver));
+                    x.ReferenceResolver = new JavascriptReferenceResolver(variableResolver);
+                   // x.SetReferencesResolver(new JavascriptReferenceResolver(variableResolver));
                 //x.AllowClr(typeof(MailItem).GetTypeInfo().Assembly);
                 //x.AddObjectConverter(new EnumsToStringConverter());
                 //x.AddObjectConverter(new NegateBoolConverter());

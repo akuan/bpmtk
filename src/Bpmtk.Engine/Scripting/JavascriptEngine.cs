@@ -48,11 +48,13 @@ namespace Bpmtk.Engine.Scripting
 
             try
             {
-                return jsScope.Engine.Execute(script)
-                    .GetCompletionValue()?
+                //return jsScope.Engine.Execute(script)
+                //    .GetCompletionValue()?
+                //    .ToObject();
+                return jsScope.Engine.Evaluate(script)?
                     .ToObject();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new ScriptingException($"The javascript execution errors; {ex.Message}.", ex);
             }
@@ -97,8 +99,9 @@ namespace Bpmtk.Engine.Scripting
 
         public virtual object CreateCompileUnit(string script)
         {
-            var parser = new Esprima.JavaScriptParser(script);
-            var program = parser.ParseProgram();
+            var parser = new Esprima.JavaScriptParser();
+            //var program = parser.ParseProgram();
+            var program = parser.ParseScript(script);
 
             return program;
         }
@@ -110,8 +113,9 @@ namespace Bpmtk.Engine.Scripting
             {
                 isExpression = false;
 
-                var parser = new Esprima.JavaScriptParser(script);
-                var program = parser.ParseProgram();
+                var parser = new Esprima.JavaScriptParser();
+                var program = parser.ParseScript(script);
+               // var program = parser.ParseProgram();
 
                 isExpression = this.IsExpression(program);
 
@@ -157,8 +161,8 @@ namespace Bpmtk.Engine.Scripting
 
             try
             {
-                return jsScope.Engine.Execute(compileUnit as Esprima.Ast.Program)
-                    .GetCompletionValue()?
+                return jsScope.Engine.Evaluate(compileUnit as Esprima.Ast.Script)?
+                    //.GetCompletionValue()?
                     .ToObject();
             }
             catch (Exception ex)

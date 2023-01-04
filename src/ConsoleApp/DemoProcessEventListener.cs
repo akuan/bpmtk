@@ -13,7 +13,6 @@ namespace ConsoleApp
             var node = executionContext.Node;
 
             Console.WriteLine("Activity started: {0}[{1}]", node.Id, node.Name);
-
             
         }
 
@@ -22,7 +21,6 @@ namespace ConsoleApp
             var node = executionContext.Node;
 
             Console.WriteLine("Activity ended: {0}[{1}]", node.Id, node.Name);
-
             
         }
 

@@ -38,8 +38,8 @@ namespace Bpmtk.Engine.WebApi
 
             //允许跨域
             var cors = new CorsPolicyBuilder().AllowAnyHeader()
-                .AllowAnyMethod()
-                .AllowAnyOrigin()
+                .AllowAnyMethod() 
+                //.AllowAnyOrigin()
                 .AllowCredentials()
                 .Build();
 
@@ -51,15 +51,16 @@ namespace Bpmtk.Engine.WebApi
             {
                 builder.UseLoggerFactory(LoggerFactory);
                 builder.UseLazyLoadingProxies(true);
-                builder.UseMySql(connectionString);
+                // builder.UseMySql(connectionString); 
+                builder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
             });
-
+            //services.AddOptions("MvcOptions.EnableEndpointRouting = false");
             services
-                .AddProcessEngine();
-
+                .AddProcessEngine();  
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
+            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            //services.AddMvc();
+            services.AddMvc(options => { options.EnableEndpointRouting = false; });
             services.AddSwaggerGen(c =>
             {
                 c.DescribeAllParametersInCamelCase();

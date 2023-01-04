@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -72,10 +72,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Jint" Version="3.0.0-beta-1525" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.0.2" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="Quartz" Version="3.0.7" />
+    <PackageReference Include="Jint" Version="3.0.0-beta-2044" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="Quartz" Version="3.5.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -18,11 +18,11 @@ namespace Bpmtk.Engine.Tests.Bpmn.Gateway
         public async Task Execute()
         {
             await base.DeployBpmnModel("Bpmtk.Engine.Tests.Resources.Gateway.ExclusiveGatewayTest.testDefaultSequenceFlow.bpmn20.xml");
-
+            log.Debug("DeployBpmnModel:Bpmtk.Engine.Tests.Resources.Gateway.ExclusiveGatewayTest.testDefaultSequenceFlow.bpmn20.xml");
             //1. Set input = 2, to take default outgoing.
             var map = new Dictionary<string, object>();
             map.Add("input", 2);
-
+            log.Debug("input=2");
             var pi = await this.runtimeManager.StartProcessByKeyAsync("exclusiveGwDefaultSequenceFlow",
                 map);
 
@@ -31,9 +31,15 @@ namespace Bpmtk.Engine.Tests.Bpmn.Gateway
                 .SetProcessInstanceId(pi.Id)
                 .SetState(TaskState.Active);
 
+            log.Debug("Start Process...");
             var tasks = await query.ListAsync();
             Assert.True(tasks.Count == 1);
             Assert.True(tasks[0].Name == "Default input");
+            log.Debug($"Now Task Count is {tasks.Count}");
+            foreach(var t in tasks)
+            {
+                log.Debug($"Task {t.Id}={t.Name}");
+            }
             await taskManager.CompleteAsync(tasks[0].Id);
             this.AssertProcessEnded(pi.Id);
 

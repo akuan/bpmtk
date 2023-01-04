@@ -35,7 +35,7 @@ namespace Bpmtk.Engine.Scripting
             var isUnresolved = reference.IsUnresolvableReference();
             var isPrimi = reference.HasPrimitiveBase();
 
-            value = baseValue.AsObject().Get(name);
+            value = baseValue.Get(name);
 
             return true;
         }
@@ -50,7 +50,7 @@ namespace Bpmtk.Engine.Scripting
             var isPrimi = reference.HasPrimitiveBase();
 
             object result = null;
-            if (this.variableResolver.Resolve(name, out result))
+            if (this.variableResolver.Resolve(name.ToString(), out result))
             {
                 value = JsValue.FromObject(engine, result);
 

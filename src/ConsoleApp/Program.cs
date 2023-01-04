@@ -18,20 +18,24 @@ namespace ConsoleApp
         {
             //Setup LoggerFactory.
             var loggerFactory = new LoggerFactory();
-            loggerFactory.AddConsole(
-                //LogLevel.Debug //Warning  //filter logger level.
-                );
+           // loggerFactory.AddProvider(ILoggerProvider)
+            //loggerFactory.AddConsole(
+            //    //LogLevel.Debug //Warning  //filter logger level.
+            //    );
 
             //Create Bpmtk-Context Factory, and configure database.
             var conextFactory = new ContextFactory();
+            var conn = "server = localhost; port = 3306; database = bpmtk4; user id = root; password = mctx123456; SslMode = None";
             conextFactory.Configure(builder =>
             {
                 builder.EnableSensitiveDataLogging();
                 builder.UseLoggerFactory(loggerFactory);
-                builder.UseLazyLoadingProxies(true);
-                builder.UseMySql("server=localhost;uid=root;pwd=123456;database=bpmtk4");
+                builder.UseLazyLoadingProxies(true); 
+                // builder.UseMySql("server=localhost;uid=root;pwd=mctx123456;database=bpmtk3");
+                builder.UseMySql(conn,ServerVersion.AutoDetect(conn));
             });
 
+            
             //Create custom ProcessEventListener.
             var processEventListener = new DemoProcessEventListener();
 
@@ -60,12 +64,12 @@ namespace ConsoleApp
 
             //Create one test user.
             var identityManager = context.IdentityManager;
-
+             
             //Check if test user exists.
-            var user = identityManager.FindUserById("test");
+            var user = identityManager.FindUserById("Aaron");
             if (user == null)
             {
-                user = new User() { Id = "test", Name = "Test" };
+                user = new User() { Id = "Aaron", Name = "Aaron" };
                 identityManager.CreateUser(user);
             }
 
@@ -88,9 +92,9 @@ namespace ConsoleApp
 
             var deploymentBuilder = deploymentManager.CreateDeploymentBuilder();
             var deployment = deploymentBuilder
-                .SetCategory("demo")
-                .SetName("Demo deployment")
-                .SetMemo("A simple process demo for BPMTK.")
+                .SetCategory("演示")
+                .SetName("流程演示")
+                .SetMemo("简单的 BPMTK 流程处理.")
                 .SetBpmnModel(modelContent)
                 .Build();
 
@@ -124,6 +128,12 @@ namespace ConsoleApp
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="pi"></param>
+        /// <returns></returns>
         protected static async Task HumanTasksInteraction(IContext context, IProcessInstance pi)
         {
             //Create taskQuery.
@@ -134,6 +144,7 @@ namespace ConsoleApp
 
             // After process start, only task 0 should be active
             var tasks = await query.ListAsync();
+            
             Assert.True(tasks.Count == 1);
             Assert.True(tasks[0].Name == "Task 0");
 
@@ -173,6 +184,11 @@ namespace ConsoleApp
             Assert.True(0 == tasks.Count); //all tasks completed.
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="resourceName"></param>
+        /// <returns></returns>
         protected static byte[] GetBpmnModelContentFromResource(string resourceName)
         { 
             using (var ms = new MemoryStream())

@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using Bpmtk.Engine.Models;
 using Bpmtk.Engine.Runtime;
 using Bpmtk.Engine.Storage;
+using log4net.Config; 
+using log4net;
 
 namespace Bpmtk.Engine.Tests
 {
@@ -24,9 +26,14 @@ namespace Bpmtk.Engine.Tests
         protected readonly IIdentityManager identityManager;
         protected readonly ILoggerFactory loggerFactory = new LoggerFactory();
         protected ITransaction transaction;
-
+        protected static ILog log;
         public BpmtkTestCase(ITestOutputHelper output)
         {
+            string fileName = "\\log4net.test.config";
+            var logCfg = new FileInfo(AppDomain.CurrentDomain.BaseDirectory + fileName);
+            XmlConfigurator.ConfigureAndWatch(logCfg);
+
+            log = LogManager.GetLogger(GetType());
             var loggerProvider = new XunitLoggerProvider(output);
             this.loggerFactory.AddProvider(loggerProvider);
 
@@ -70,7 +77,8 @@ namespace Bpmtk.Engine.Tests
             {
                // builder.UseLoggerFactory(loggerFactory);
                 builder.UseLazyLoadingProxies(true);
-                builder.UseMySql("server=localhost;uid=root;pwd=123456;database=bpmtk3");
+                var conn = "server=localhost;uid=root;pwd=mctx123456;database=bpmtk4";
+                builder.UseMySql(conn,ServerVersion.AutoDetect(conn));
             });
 
             var engine = new ProcessEngineBuilder()

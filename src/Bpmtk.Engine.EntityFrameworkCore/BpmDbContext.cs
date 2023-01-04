@@ -120,12 +120,16 @@ namespace Bpmtk.Engine.Storage
             base.OnModelCreating(modelBuilder);
         }
 
-        Task IBpmDbContext.AddAsync(object entity) => this.AddAsync(entity);
+        Task  IBpmDbContext.AddAsync(object entity) => this.AddAsync(entity).AsTask();
+        //Task<T> IBpmDbContext.FindAsync<T>(object entity) => this.FindAsync(typeof(T), entity);
 
         void IBpmDbContext.Add(object entity) => this.Add(entity);
 
         void IBpmDbContext.Remove(object entity) => this.Remove(entity);
 
         void IBpmDbContext.Update(object entity) => this.Update(entity);
+
+        Task<TEntity> IBpmDbContext.FindAsync<TEntity>(params object[] keyValues)
+         => this.FindAsync<TEntity>(keyValues).AsTask();
     }
 }

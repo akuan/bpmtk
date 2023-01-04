@@ -22,7 +22,9 @@ namespace Bpmtk.Engine.Storage
             if (sql == null)
                 throw new ArgumentNullException(nameof(sql));
 
-            return this.context.Set<TEntity>().FromSql(new RawSqlString(sql), parameters);
+           // FormattableString fs = new FormattableString(sql);
+
+            return this.context.Set<TEntity>().FromSqlRaw(sql, parameters);
         }
 
         public virtual IQueryable<ProcessDefinition> ProcessDefinitions => this.context.ProcessDefinitions;
