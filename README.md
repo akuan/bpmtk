@@ -20,3 +20,9 @@ BPMTK 是开源的业务流程平台, 符合BPMN 2.0业务流程语言规范, �
     <li>Create migrations: dotnet ef migrations add {MigrationName}</li>
     <li>Update database: dotnet ef database update</li>
 </ul>
+<h3>本库更改</h3> 
+<ul>
+    <li>使用.Net 6替换原来的.net standard 2.1</li>
+    <li>升级依赖库</li>
+    <li>使用sqlsuger替换EF(进行中)</li>
+</ul>
