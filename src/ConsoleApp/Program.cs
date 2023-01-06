@@ -1,14 +1,16 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using System.IO;
-using Bpmtk.Engine;
+﻿using Bpmtk.Engine;
 using Bpmtk.Engine.Models;
-using System.Threading.Tasks;
+using Bpmtk.Engine.Repository;
 using Bpmtk.Engine.Runtime;
 using Bpmtk.Engine.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
+using NHibernate.Util;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ConsoleApp
 {
@@ -16,26 +18,25 @@ namespace ConsoleApp
     {
         static void Main(string[] args)
         {
-            //Setup LoggerFactory.
-            var loggerFactory = new LoggerFactory();
-           // loggerFactory.AddProvider(ILoggerProvider)
-            //loggerFactory.AddConsole(
-            //    //LogLevel.Debug //Warning  //filter logger level.
-            //    );
-
+            //Setup LoggerFactory.           
+            var loggerFactory = LoggerFactory.Create(builder =>
+        builder.AddSystemdConsole(options =>
+        {
+            options.IncludeScopes = true;
+            options.TimestampFormat = "HH:mm:ss ";
+        }));
+            ILogger<Program> logger = loggerFactory.CreateLogger<Program>();
             //Create Bpmtk-Context Factory, and configure database.
             var conextFactory = new ContextFactory();
             var conn = "server = localhost; port = 3306; database = bpmtk4; user id = root; password = mctx123456; SslMode = None";
+            logger.LogDebug(conn);
             conextFactory.Configure(builder =>
             {
                 builder.EnableSensitiveDataLogging();
                 builder.UseLoggerFactory(loggerFactory);
                 builder.UseLazyLoadingProxies(true);
-                
-                // builder.UseMySql("server=localhost;uid=root;pwd=mctx123456;database=bpmtk3");
                 builder.UseMySql(conn,ServerVersion.AutoDetect(conn));
             });
-
             
             //Create custom ProcessEventListener.
             var processEventListener = new DemoProcessEventListener();
@@ -45,14 +46,14 @@ namespace ConsoleApp
                 .SetContextFactory(conextFactory)
                 .SetLoggerFactory(loggerFactory)
                 .AddProcessEventListener(processEventListener)
-                //.Configure(options =>
-                //{
-                //    options.SetValue("isActivityRecorderDisabled", false);
-                //})
+                .Configure(options =>
+                {
+                    options.SetProperty("isActivityRecorderDisabled", false);
+                })
                 .Build();
 
             //init process-engine props. (optional)
-            //engine.SetValue("isActivityRecorderDisabled", false);
+            engine.SetValue("isActivityRecorderDisabled", false);
 
             //Create new context.
             var context = engine.CreateContext();
@@ -65,49 +66,48 @@ namespace ConsoleApp
 
             //Create one test user.
             var identityManager = context.IdentityManager;
-             
+
             //Check if test user exists.
             var user = identityManager.FindUserById("Aaron");
             if (user == null)
             {
+                logger.LogDebug("User Arron not Exitst,will Create User");
                 user = new User() { Id = "Aaron", Name = "Aaron" };
                 identityManager.CreateUser(user);
             }
-
             //Set current authenticated user id.
             context.SetAuthenticatedUser(user.Id);
 
-            //var deploymentManager = context.DeploymentManager;
-
-            ////var q = deploymentManager.CreateDefinitionQuery()
-            ////    .FetchLatestVersionOnly()
-            ////    .FetchDeployment()
-            ////    .FetchIdentityLinks()
-            ////    .SetName("Script")
-            ////    .List().Result;
-
-            ////var rx = x.ToList();
-
-            ////Deploy BPMN 2.0 Model.
-            //var modelContent = GetBpmnModelContentFromResource("ConsoleApp.resources.ParallelGatewayTest.testNestedForkJoin.bpmn20.xml");
-
-            //var deploymentBuilder = deploymentManager.CreateDeploymentBuilder();
-            //var deployment = deploymentBuilder
-            //    .SetCategory("演示")
-            //    .SetName("流程演示")
-            //    .SetMemo("简单的 BPMTK 流程处理.")
-            //    .SetBpmnModel(modelContent)               
-            //    .Build();
-
-            //var processDefinitions = deployment.ProcessDefinitions;
-
-            //foreach (var procDef in processDefinitions)
-            //{                                
-            //    Console.WriteLine($"Process '{procDef.Key}' has been deployed.");
-            //}             
+            var deploymentManager = context.DeploymentManager;
 
             var processId = "nestedForkJoin"; //processDefinitionKey
+            var q = deploymentManager.CreateDefinitionQuery()
+                .FetchLatestVersionOnly()
+                .SetKey(processId)
+                .FetchIdentityLinks()                 
+                .ListAsync().Result;
+            ////var rx = x.ToList();
+            if (!q.Any<IProcessDefinition>())
+            {
+                logger.LogDebug($"Process ${processId} not Deployment，will Deployment");
+                //Deploy BPMN 2.0 Model.
+                var modelContent = GetBpmnModelContentFromResource("ConsoleApp.resources.ParallelGatewayTest.testNestedForkJoin.bpmn20.xml");
 
+                var deploymentBuilder = deploymentManager.CreateDeploymentBuilder();
+                var deployment = deploymentBuilder
+                    .SetCategory("演示")
+                    .SetName("流程演示")
+                    .SetMemo("简单的 BPMTK 流程处理.")
+                    .SetBpmnModel(modelContent)
+                    .Build();
+                var processDefinitions = deployment.ProcessDefinitions;
+
+                foreach (var procDef in processDefinitions)
+                {
+                    Console.WriteLine($"Process '{procDef.Key}' has been deployed.");
+                }
+            } 
+           
             //Start new process-instance.
             var runtimeManager = context.RuntimeManager;
             var pi = runtimeManager.StartProcessByKeyAsync(processId)
