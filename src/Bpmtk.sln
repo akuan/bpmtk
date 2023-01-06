@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28721.148
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bpmtk.Engine", "Bpmtk.Engine\Bpmtk.Engine.csproj", "{6B8CAE2F-6568-4270-A6C8-87C0E52E6E8B}"
 EndProject
@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bpmtk.Engine.EntityFramewor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{407DF52D-3F50-4A68-B483-E26A3D5ACCC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MysqlConsoleApp", "MysqlConsoleApp\MysqlConsoleApp.csproj", "{72B0B7F7-C8E3-48F1-9600-B86D2075D814}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MysqlConsoleApp", "MysqlConsoleApp\MysqlConsoleApp.csproj", "{72B0B7F7-C8E3-48F1-9600-B86D2075D814}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

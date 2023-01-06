@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Bpmtk.Bpmn2;
+﻿using Bpmtk.Bpmn2;
 using Bpmtk.Engine.Bpmn2;
-using Bpmtk.Engine.Events;
 using Bpmtk.Engine.Models;
-using Bpmtk.Engine.Scheduler;
 using Bpmtk.Engine.Storage;
 using Bpmtk.Engine.Utils;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Bpmtk.Engine.Repository
 {
@@ -34,53 +31,7 @@ namespace Bpmtk.Engine.Repository
             this.context = context;
             this.session = context.DbSession;
             this.deploymentManager = deploymentManager;
-        }
-
-        //protected virtual async Task<IDictionary<string, ProcessDefinition>> GetLatestVersionsAsync(params string[] processDefinitionKeys)
-        //{
-        //    var keys = processDefinitionKeys;
-        //    var query = this.session.ProcessDefinitions
-        //        .Where(x => keys.Contains(x.Key))
-        //        .GroupBy(x => x.Key)
-        //        .Select(x => new
-        //        {
-        //            Key = x.Key,
-        //            Version = x.OrderByDescending(y => y.Version).FirstOrDefault()
-        //        });
-
-        //    var results = this.session.QueryMultipleAsync(query);
-
-        //    Dictionary<string, ProcessDefinition> map = new Dictionary<string, ProcessDefinition>();
-        //    foreach (var item in results)
-        //    {
-        //        map.Add(item.Key, item.Version);
-        //    }
-
-        //    return map;
-        //}
-
-        //protected virtual async Task<IDictionary<string, ProcessDefinition>> GetLatestVersionsAsync(params string[] processDefinitionKeys)
-        //{
-        //    var keys = processDefinitionKeys;
-        //    var query = this.session.ProcessDefinitions
-        //        .Where(x => keys.Contains(x.Key))
-        //        .GroupBy(x => x.Key)
-        //        .Select(x => new
-        //        {
-        //            Key = x.Key,
-        //            Version = x.OrderByDescending(y => y.Version).FirstOrDefault()
-        //        });
-
-        //    var results = this.session.QueryMultipleAsync(query);
-
-        //    Dictionary<string, ProcessDefinition> map = new Dictionary<string, ProcessDefinition>();
-        //    foreach (var item in results)
-        //    {
-        //        map.Add(item.Key, item.Version);
-        //    }
-
-        //    return map;
-        //}
+        }         
 
         IDeployment IDeploymentBuilder.Build() => this.Build();
 
@@ -91,6 +42,11 @@ namespace Bpmtk.Engine.Repository
             return this.BuildAsync().Result;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="DeploymentException"></exception>
         public virtual async Task<Deployment> BuildAsync()
         {
             var model = BpmnModel.FromBytes(this.modelData, this.disableModelValidations);
@@ -141,6 +97,12 @@ namespace Bpmtk.Engine.Repository
             return deployment;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="processDefinition"></param>
+        /// <param name="bpmnProcess"></param>
+        /// <param name="prevProcessDefinition"></param>
         protected virtual void InitializeEventsAndScheduledJobs(
             ProcessDefinition processDefinition,
             Process bpmnProcess,

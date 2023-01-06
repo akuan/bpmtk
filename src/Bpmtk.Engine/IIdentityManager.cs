@@ -1,7 +1,6 @@
-﻿using System;
+﻿using Bpmtk.Engine.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Bpmtk.Engine.Models;
 
 namespace Bpmtk.Engine
 {
@@ -19,9 +18,9 @@ namespace Bpmtk.Engine
 
         Group FindGroupById(string groupId);
 
-        Task UpdateGroupAsync(Group group);
+        void UpdateGroup(Group group);
 
-        Task UpdateUserAsync(User user);
+        void UpdateUser(User user);
 
         Task DeleteGroupAsync(Group group);
 

@@ -31,6 +31,13 @@ namespace Bpmtk.Engine.Tasks
 
         public virtual IQueryable<TaskInstance> Tasks => this.session.Tasks;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="taskId"></param>
+        /// <param name="comment"></param>
+        /// <returns></returns>
+        /// <exception cref="ObjectNotFoundException"></exception>
         public virtual TaskInstance Claim(long taskId, string comment = null)
         {
             var task = this.Find(taskId);
@@ -360,30 +367,21 @@ namespace Bpmtk.Engine.Tasks
             return task;
         }
 
-        public Task<TaskInstance> SuspendAsync(long taskId, string comment = null)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<TaskInstance> SuspendAsync(long taskId, string comment = null)=>SuspendAsync(taskId, comment);
+         
 
-        ITaskInstanceBuilder ITaskManager.CreateBuilder()
-        {
-            throw new NotImplementedException();
-        }
+        ITaskInstanceBuilder ITaskManager.CreateBuilder() => CreateBuilder();
+         
 
-        ITaskInstance ITaskManager.Find(long taskId)
-        {
-            throw new NotImplementedException();
-        }
+        ITaskInstance ITaskManager.Find(long taskId)=>this.Find(taskId);
+         
 
-        ITaskInstance ITaskManager.Claim(long taskId, string comment)
-        {
-            throw new NotImplementedException();
-        }
+        ITaskInstance ITaskManager.Claim(long taskId, string comment)=>Claim(taskId, comment);
+         
 
         ITaskInstance ITaskManager.Assign(long taskId, string assignee, string comment)
-        {
-            throw new NotImplementedException();
-        }
+         =>Assign(taskId, assignee, comment);
+
 
         ITaskInstance ITaskManager.Suspend(long taskId, string comment)
         {

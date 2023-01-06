@@ -127,7 +127,7 @@ namespace Bpmtk.Engine.Storage
 
         void IBpmDbContext.Remove(object entity) => this.Remove(entity);
 
-        void IBpmDbContext.Update(object entity) => this.Update(entity);
+        void IBpmDbContext.Update(object entity) => this.Update(entity);       
 
         Task<TEntity> IBpmDbContext.FindAsync<TEntity>(params object[] keyValues)
          => this.FindAsync<TEntity>(keyValues).AsTask();

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 using Bpmtk.Engine.Tasks;
+using System.Linq;
 
 namespace Bpmtk.Engine.Tests.Bpmn
 {
@@ -25,11 +26,9 @@ namespace Bpmtk.Engine.Tests.Bpmn
                 map);
 
             var tasks = await this.taskManager.CreateQuery()
-                .SetState(TaskState.Active)
-                .ListAsync();
-
-            Assert.True(tasks.Count == 1);
-
+                .SetState(TaskState.Active) 
+                .ListAsync(); 
+            Assert.True(tasks.Count == 1);            
             await taskManager.CompleteAsync(tasks[0].Id);
 
             this.AssertProcessEnded(pi.Id);

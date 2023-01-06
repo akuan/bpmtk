@@ -35,6 +35,6 @@ namespace Bpmtk.Engine.WebApi.Models
         {
             get;
             set;
-        }
+        } = 20;
     }
 }

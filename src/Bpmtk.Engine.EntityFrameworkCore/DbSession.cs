@@ -21,9 +21,6 @@ namespace Bpmtk.Engine.Storage
         {
             if (sql == null)
                 throw new ArgumentNullException(nameof(sql));
-
-           // FormattableString fs = new FormattableString(sql);
-
             return this.context.Set<TEntity>().FromSqlRaw(sql, parameters);
         }
 
@@ -99,14 +96,12 @@ namespace Bpmtk.Engine.Storage
 
         public virtual async Task SaveAsync(object entity)
         {
-            await this.context.AddAsync(entity);
-            //await this.context.SaveChangesAsync();
+            await this.context.AddAsync(entity); 
         }
 
         public virtual async Task SaveRangeAsync(IEnumerable<object> items)
         {
-            await this.context.AddRangeAsync(items);
-            //await this.context.SaveChangesAsync();
+            await this.context.AddRangeAsync(items); 
         }
 
         public virtual IQueryable<TEntity> Query<TEntity>() where TEntity : class
@@ -127,6 +122,7 @@ namespace Bpmtk.Engine.Storage
         public virtual void Remove(object entity)
             => this.context.Remove(entity);
 
-        public virtual void Flush() => this.context.SaveChanges();
+        public virtual void Flush() => this.context.SaveChanges(); 
+         
     }
 }

@@ -83,7 +83,7 @@ namespace Bpmtk.Engine.Storage
 
         TEntity Find<TEntity>(params object[] keyValues) where TEntity : class;
 
-        void Update(object entity);
+        void Update(object entity); 
 
         void Save(object entity);
 

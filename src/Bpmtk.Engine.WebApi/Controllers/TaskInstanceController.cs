@@ -24,7 +24,7 @@ namespace Bpmtk.Engine.WebApi.Controllers
         }
 
         [HttpGet]
-        public virtual async Task<ActionResult<PagedResult<TaskInstanceModel>>> Get([FromBody] TaskInstanceFilter filter)
+        public virtual async Task<ActionResult<PagedResult<TaskInstanceModel>>> Get([FromQuery] TaskInstanceFilter filter)
         {
             var result = new PagedResult<TaskInstanceModel>();
 

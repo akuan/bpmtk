@@ -52,22 +52,22 @@ namespace Bpmtk.Engine.Identity
         public virtual Group FindGroupById(string groupId)
             => this.session.Find<Group>(groupId);
 
-        //public virtual async Task<Group> FindGroupByNameAsync(string name)
-        //{
-        //    var q = this.Groups.Where(x => x.Name == name);
+        public virtual async Task<Group> FindGroupByNameAsync(string name)
+        {
+            var q = this.Groups.Where(x => x.Name == name);
 
-        //    return this.session.QuerySingleAsync(q);
-        //}
+            return await this.session.QuerySingleAsync(q);
+        }
 
         public virtual User FindUserById(string userId)
             => this.session.Find<User>(userId);
 
-        //public virtual Task<User> FindUserByNameAsync(string name)
-        //{
-        //    var query = this.session.Users.Where(x => x.UserName == name);
+        public virtual async Task<User> FindUserByNameAsync(string name)
+        {
+            var query = this.session.Users.Where(x => x.Name == name);
 
-        //    return this.session.QuerySingleAsync(query);
-        //}
+            return await this.session.QuerySingleAsync(query);
+        }
 
         public virtual IList<User> GetUsers(params string[] userIds)
         {
@@ -87,14 +87,16 @@ namespace Bpmtk.Engine.Identity
             return query.ToList(); //this.session.QueryMultipleAsync(query);
         }
 
-        public Task UpdateGroupAsync(Group group)
+        public void  UpdateGroup(Group group)
         {
-            throw new NotImplementedException();
+            this.session.Update(group);
+            this.session.Flush();
         }
 
-        public Task UpdateUserAsync(User user)
+        public void UpdateUser(User user)
         {
-            throw new NotImplementedException();
+            this.session.Update(user);
+            this.session.Flush();
         }
 
         public virtual void CreateUser(User user)

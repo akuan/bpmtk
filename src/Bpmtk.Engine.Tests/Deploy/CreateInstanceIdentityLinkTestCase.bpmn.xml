@@ -4,7 +4,7 @@
     <bpmn:startEvent id="StartEvent_0busnrn" name="start">
       <bpmn:outgoing>SequenceFlow_0bbuw2i</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:task id="Task_105g1f1" name="Hello Word">
+    <bpmn:task id="Task_105g1f1" name="任务1">
       <bpmn:incoming>SequenceFlow_0bbuw2i</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_03g0j1u</bpmn:outgoing>
     </bpmn:task>

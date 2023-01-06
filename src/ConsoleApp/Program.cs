@@ -30,7 +30,8 @@ namespace ConsoleApp
             {
                 builder.EnableSensitiveDataLogging();
                 builder.UseLoggerFactory(loggerFactory);
-                builder.UseLazyLoadingProxies(true); 
+                builder.UseLazyLoadingProxies(true);
+                
                 // builder.UseMySql("server=localhost;uid=root;pwd=mctx123456;database=bpmtk3");
                 builder.UseMySql(conn,ServerVersion.AutoDetect(conn));
             });
@@ -55,7 +56,7 @@ namespace ConsoleApp
 
             //Create new context.
             var context = engine.CreateContext();
-
+            
             //Start db transaction.
             var transaction = context.DbSession.BeginTransaction(); 
 
@@ -76,33 +77,34 @@ namespace ConsoleApp
             //Set current authenticated user id.
             context.SetAuthenticatedUser(user.Id);
 
-            var deploymentManager = context.DeploymentManager;
+            //var deploymentManager = context.DeploymentManager;
 
-            //var q = deploymentManager.CreateDefinitionQuery()
-            //    .FetchLatestVersionOnly()
-            //    .FetchDeployment()
-            //    .FetchIdentityLinks()
-            //    .SetName("Script")
-            //    .List().Result;
+            ////var q = deploymentManager.CreateDefinitionQuery()
+            ////    .FetchLatestVersionOnly()
+            ////    .FetchDeployment()
+            ////    .FetchIdentityLinks()
+            ////    .SetName("Script")
+            ////    .List().Result;
 
-            //var rx = x.ToList();
+            ////var rx = x.ToList();
 
-            //Deploy BPMN 2.0 Model.
-            var modelContent = GetBpmnModelContentFromResource("ConsoleApp.resources.ParallelGatewayTest.testNestedForkJoin.bpmn20.xml");
+            ////Deploy BPMN 2.0 Model.
+            //var modelContent = GetBpmnModelContentFromResource("ConsoleApp.resources.ParallelGatewayTest.testNestedForkJoin.bpmn20.xml");
 
-            var deploymentBuilder = deploymentManager.CreateDeploymentBuilder();
-            var deployment = deploymentBuilder
-                .SetCategory("演示")
-                .SetName("流程演示")
-                .SetMemo("简单的 BPMTK 流程处理.")
-                .SetBpmnModel(modelContent)
-                .Build();
+            //var deploymentBuilder = deploymentManager.CreateDeploymentBuilder();
+            //var deployment = deploymentBuilder
+            //    .SetCategory("演示")
+            //    .SetName("流程演示")
+            //    .SetMemo("简单的 BPMTK 流程处理.")
+            //    .SetBpmnModel(modelContent)               
+            //    .Build();
 
-            var processDefinitions = deployment.ProcessDefinitions;
-            foreach(var procDef in processDefinitions)
-            {
-                Console.WriteLine($"Process '{procDef.Key}' has been deployed.");
-            }
+            //var processDefinitions = deployment.ProcessDefinitions;
+
+            //foreach (var procDef in processDefinitions)
+            //{                                
+            //    Console.WriteLine($"Process '{procDef.Key}' has been deployed.");
+            //}             
 
             var processId = "nestedForkJoin"; //processDefinitionKey
 
@@ -110,6 +112,7 @@ namespace ConsoleApp
             var runtimeManager = context.RuntimeManager;
             var pi = runtimeManager.StartProcessByKeyAsync(processId)
                 .Result;
+            Console.WriteLine($"Start process {processId}"); 
 
             HumanTasksInteraction(context, pi)
                 .GetAwaiter().GetResult();
@@ -148,6 +151,7 @@ namespace ConsoleApp
             Assert.True(tasks.Count == 1);
             Assert.True(tasks[0].Name == "Task 0");
 
+            taskManager.Assign(tasks[0].Id, context.UserId, "我的任务");
             // Completing task 0 will create Task A and B
             await taskManager.CompleteAsync(tasks[0].Id);
             tasks = await query.ListAsync();

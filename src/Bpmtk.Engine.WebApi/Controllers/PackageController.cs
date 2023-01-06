@@ -22,7 +22,7 @@ namespace Bpmtk.Engine.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PagedResult<PackageModel>>> Get([FromBody] PackageFilter filter)
+        public async Task<ActionResult<PagedResult<PackageModel>>> Get([FromQuery] PackageFilter filter)
         {
             var result = new PagedResult<PackageModel>();
             

@@ -2,7 +2,6 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/src/.vs/Bpmtk/v16
 /src/Bpmtk.Bpmn2/.vs/Bpmtk.Bpmn2
 /src/Bpmtk.Bpmn2/bin/Debug/netstandard2.0
 /src/Bpmtk.Bpmn2/obj
@@ -25,3 +24,5 @@
 /src/ConsoleApp/obj
 /src/Bpmtk.Engine.Hibernate/.vs/Bpmtk.Engine.Hibernate
 /src/MysqlConsoleApp/obj
+/src/.vs
+/src/*/bin

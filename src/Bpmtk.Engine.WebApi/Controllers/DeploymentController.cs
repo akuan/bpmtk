@@ -21,7 +21,7 @@ namespace Bpmtk.Engine.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PagedResult<DeploymentModel>>> Get([FromBody] DeploymentFilter filter)
+        public async Task<ActionResult<PagedResult<DeploymentModel>>> Get([FromQuery] DeploymentFilter filter)
         {
             var result = new PagedResult<DeploymentModel>();
             

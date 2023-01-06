@@ -20,7 +20,7 @@ namespace Bpmtk.Engine.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PagedResult<ProcessInstanceModel>>> Get([FromBody] ProcessInstanceFilter filter)
+        public async Task<ActionResult<PagedResult<ProcessInstanceModel>>> Get([FromQuery] ProcessInstanceFilter filter)
         {
             var result = new PagedResult<ProcessInstanceModel>();
 
